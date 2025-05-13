@@ -1,27 +1,36 @@
 {
   "name": "ai-agent-smith",
   "version": "1.0.0",
-  "description": "AI Agent Smith - Discord Content Scraper",
-  "main": "dist/index.js",
-  "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "ts-node src/index.ts",
-    "lint": "eslint . --ext .ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "main": "index.js",
+  "repository": "https://github.com/0x2me/ai-agent-smith.git",
+  "author": "Philip Tuomey <p.tuomey1@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@fastify/cors": "^11.0.1",
+    "@prisma/client": "^6.7.0",
+    "axios": "^1.9.0",
+    "commander": "^13.1.0",
+    "dotenv": "^16.5.0",
+    "fastify": "^5.3.2",
+    "node-telegram-bot-api": "^0.66.0",
+    "pino": "^9.6.0",
+    "pino-pretty": "^13.0.0",
+    "prisma": "^6.7.0",
+    "youtube-transcript": "^1.2.1"
   },
-  "keywords": ["ai", "agent", "discord", "scraper", "selenium"],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@types/node": "^22.15.17",
-    "ts-node": "^10.9.2",
+    "@types/node-telegram-bot-api": "^0.64.8",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
   },
-  "dependencies": {
-    "@types/selenium-webdriver": "^4.1.28",
-    "chromedriver": "^136.0.0",
-    "dotenv": "^16.5.0",
-    "selenium-webdriver": "^4.32.0"
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio",
+    "cli": "ts-node src/cli.ts"
   }
 }

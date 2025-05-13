@@ -1,0 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model YouTubeVideo {
+  id           String   @id @default(cuid())
+  videoId      String   @unique
+  channelId    String
+  title        String
+  description  String?
+  publishedAt  DateTime
+  thumbnailUrl String?
+  transcript   String?  @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([channelId])
+}
+
+model YouTubeChannel {
+  id          String   @id @default(cuid())
+  channelId   String   @unique
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

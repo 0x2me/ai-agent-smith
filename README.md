@@ -1,104 +1,86 @@
-# AI Agent Smith - Discord Content Scraper
+# YouTube Video Service
 
-A TypeScript application for scraping content from Discord channels using Selenium WebDriver.
+A service that fetches the latest videos from YouTube channels, including their transcripts, and stores them in a PostgreSQL database using Prisma.
 
 ## Features
 
-- Headless browser automation with Selenium and ChromeDriver
-- Login to Discord with credentials
-- Navigate to specific Discord servers and channels
-- Scrape messages, including author, content, timestamp, and attachments
-- Save scraped data in multiple formats (JSON, CSV, TXT)
-- Configurable via environment variables
+- Fetch latest videos from a YouTube channel
+- Store video metadata and transcripts in PostgreSQL database
+- CLI for fetching and managing videos
+- REST API for accessing the data
 
 ## Prerequisites
 
-- Node.js (v14 or higher)
-- npm or yarn
-- Chrome browser installed
+- Node.js and Yarn
+- PostgreSQL database
+- YouTube Data API key
 
-## Installation
+## Setup
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/0x2me/ai-agent-smith.git
-   cd ai-agent-smith
+1. Install dependencies:
+   ```
+   yarn install
    ```
 
-2. Install dependencies:
-   ```bash
-   npm install
+2. Set up environment variables:
+   - Create a `.env` file with the following:
+   ```
+   DATABASE_URL="postgresql://username:password@localhost:5432/youtube_service?schema=public"
+   YOUTUBE_API_KEY="your-youtube-api-key"
    ```
 
-3. Create a `.env` file based on the provided `.env.example`:
-   ```bash
-   cp .env.example .env
+3. Set up the database:
+   ```
+   yarn prisma:migrate
    ```
 
-4. Update the `.env` file with your Discord credentials and configuration.
-
-## Configuration
-
-Edit the `.env` file to configure the application:
-
-```
-# Discord credentials
-DISCORD_EMAIL=your_email@example.com
-DISCORD_PASSWORD=your_password
-DISCORD_SERVER_IDS=server_id_1,server_id_2
-DISCORD_CHANNEL_IDS=channel_id_1,channel_id_2
-
-# Selenium configuration
-SELENIUM_HEADLESS=true
-SELENIUM_IMPLICIT_WAIT_MS=10000
-
-# Output configuration
-OUTPUT_DIRECTORY=./data
-OUTPUT_FILE_FORMAT=json  # json, csv, or txt
-```
+4. Generate Prisma client:
+   ```
+   yarn prisma:generate
+   ```
 
 ## Usage
 
-1. Build the application:
-   ```bash
-   npm run build
-   ```
+### Start API Server
 
-2. Run the application:
-   ```bash
-   npm start
-   ```
-
-For development:
-```bash
-npm run dev
+```
+yarn dev
 ```
 
-## Output
+The server will start at http://localhost:3000
 
-Scraped data will be saved in the configured output directory (default: `./data`) in the specified format.
+### Using the CLI
 
-### JSON Format Example
+The CLI provides commands to fetch and view YouTube videos and transcripts:
 
-```json
-[
-  {
-    "id": "message_id",
-    "author": "User#1234",
-    "content": "Hello, world!",
-    "timestamp": "Today at 12:34 PM",
-    "attachments": []
-  }
-]
-```
+1. Fetch videos from a channel:
+   ```
+   yarn cli fetch UC_x5XG1OV2P6uZZ5FSM9Ttw
+   ```
 
-## Project Structure
+2. List videos from a channel:
+   ```
+   yarn cli list UC_x5XG1OV2P6uZZ5FSM9Ttw
+   ```
 
-- `src/config/config.ts` - Configuration management
-- `src/services/discord-scraper.ts` - Discord scraping functionality
-- `src/utils/logger.ts` - Logging utilities
-- `src/index.ts` - Main application entry point
+3. List videos with transcript preview:
+   ```
+   yarn cli list UC_x5XG1OV2P6uZZ5FSM9Ttw --with-transcript
+   ```
 
-## License
+4. Get full transcript for a video:
+   ```
+   yarn cli transcript dQw4w9WgXcQ
+   ```
 
-ISC
+### API Endpoints
+
+- `GET /health` - Health check
+- `GET /channels` - Get all stored channels
+- `GET /channels/:channelId/videos` - Get all videos for a channel
+- `POST /channels/:channelId/fetch` - Fetch latest videos for a channel
+
+## Development
+
+- Run in development mode: `yarn dev`
+- Access Prisma Studio to view database: `yarn prisma:studio`
